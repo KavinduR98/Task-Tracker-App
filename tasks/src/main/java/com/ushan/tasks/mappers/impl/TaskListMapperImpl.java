@@ -6,10 +6,12 @@ import com.ushan.tasks.domain.entities.TaskList;
 import com.ushan.tasks.domain.entities.TaskStatus;
 import com.ushan.tasks.mappers.TaskListMapper;
 import com.ushan.tasks.mappers.TaskMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class TaskListMapperImpl implements TaskListMapper {
 
     private final TaskMapper taskMapper;
