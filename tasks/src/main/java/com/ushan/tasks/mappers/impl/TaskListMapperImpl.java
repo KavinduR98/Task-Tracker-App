@@ -37,17 +37,20 @@ public class TaskListMapperImpl implements TaskListMapper {
 
     @Override
     public TaskListDto toDto(TaskList taskList) {
+
+        final List<Task> tasks = taskList.getTasks();
+
         return new TaskListDto(
                 taskList.getId(),
                 taskList.getTitle(),
                 taskList.getDescription(),
-                Optional.ofNullable(taskList.getTasks())
+                Optional.ofNullable(tasks )
                         .map(List::size)
                         .orElse(0),
-                calculateTaskListProgress(taskList.getTasks()),
+                calculateTaskListProgress(tasks ),
                 Optional.ofNullable(taskList.getTasks())
-                        .map(tasks ->
-                                tasks.stream().map(taskMapper::toDto).toList()
+                        .map(t ->
+                                t.stream().map(taskMapper::toDto).toList()
                         ).orElse(null)
         );
     }
@@ -58,9 +61,9 @@ public class TaskListMapperImpl implements TaskListMapper {
             return null;
         }
 
-        long closedTaskCount = tasks.stream().filter(task ->
-                TaskStatus.CLOSED == task.getStatus()
-        ).count();
+        long closedTaskCount = tasks.stream()
+                .filter(task -> TaskStatus.CLOSED == task.getStatus())
+                .count();
 
         return (double) (closedTaskCount / tasks.size());
     }
